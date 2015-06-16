@@ -17,7 +17,8 @@ class Tournament < ActiveRecord::Base
 
 			st = Time.now.to_i
 			run = 1
-			while cand_std > 150
+
+			while Time.now.to_i - st < 20
 
 			solo_users = all_solo
 			duo_users = all_duo
