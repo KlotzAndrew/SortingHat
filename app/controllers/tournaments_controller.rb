@@ -14,7 +14,7 @@ class TournamentsController < ApplicationController
 		#HELPERS
 
 		#get team averages + std
-		if @balanced_teams != [] && !@balanced_teams.nil?
+		if @balanced_teams.count > 0
 			team_sums = []
 			@balanced_teams.each do |y|
 				team_sums << y.inject{|sum,x| sum + x }
