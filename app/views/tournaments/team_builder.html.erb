@@ -1,0 +1,51 @@
+<h1>Building Teams For a Better World</h1>
+
+<%= @name %>
+
+<strong>Inputs (<%= @player_count %>/40)</strong> <br>
+	<%= form_for @tournament do |t| %>
+	  <%= t.submit "Random Values" %>
+	<% end %>
+<div style="margin-top: 25px;">
+	Solo Players: <%= @solo_players %> <br>
+	<%= form_for @tournament do |t| %>
+	  <%= t.text_field :solo_input, value: "eg, 123,456,689" %>
+	  <%= t.submit "Update Solo Players" %>
+	<% end %>
+</div>
+
+<div style="margin-top: 25px;">
+	Duo Players: <%= @duo_players %> <br>
+	<%= form_for @tournament do |t| %>
+	  <%= t.text_field :duo_input, value: "eg, 123,456,689,124" %>
+	  <%= t.submit "Update Duo Players" %>
+	<% end %>
+</div>
+
+<div style="margin-top: 25px;">
+	<%= form_for @tournament do |t| %>
+	  <%= t.submit "Balance Teams" %>
+ *freezes page for 3-5 minutes
+	<% end %>
+</div>
+
+<div style="margin-top: 25px;">
+	<strong>Output</strong> <br/>
+	<% i = 1 %>
+	<% @balanced_teams.each do |x| %>
+		Team <%= i %>: 
+		[
+		<% y = x.sort_by(&:to_i) %>
+		<% y.each do |z| %> 
+			<% if @check.include?(z) %>
+				<u><%= z %></u> 
+			<% else %>
+				<%= z %>
+			<% end %>,
+		<% end %> ]
+		<i>(avg. <%= @team_totals[i-1] %>)</i><br/>
+		<% i = i += 1 %>
+	<% end %>
+	<br/>
+STD: <%= @std %>
+</div>
