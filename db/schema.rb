@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20150616173719) do
     t.string   "name"
     t.string   "solo_input"
     t.string   "duo_input"
-    t.string   "balanced_teams"
+    t.text     "balanced_teams"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

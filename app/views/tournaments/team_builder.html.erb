@@ -2,7 +2,7 @@
 
 <%= @name %>
 
-<strong>Inputs (<%= @player_count %>/40)</strong> <br>
+<strong>Inputs (<%= @player_count %>/40) *only works for 40 players</strong> <br>
 	<%= form_for @tournament do |t| %>
 	  <%= t.submit "Random Values" %>
 	<% end %>
@@ -25,7 +25,7 @@
 <div style="margin-top: 25px;">
 	<%= form_for @tournament do |t| %>
 	  <%= t.submit "Balance Teams" %>
- *freezes page for 3-5 minutes
+ *Settings @ low, freezes page for 1-2 minutes
 	<% end %>
 </div>
 
@@ -43,9 +43,9 @@
 				<%= z %>
 			<% end %>,
 		<% end %> ]
-		<i>(avg. <%= @team_totals[i-1] %>)</i><br/>
+		<i>(avg: <%= @team_totals[i-1] %>, Diff from mean: <%= @team_totals[i-1] - @team_mean %>)</i><br/>
 		<% i = i += 1 %>
 	<% end %>
 	<br/>
-STD: <%= @std %>
+STD: <strong><%= @std %></strong>, AVG: <strong><%= @team_mean %></strong>, Spread: <strong><%= @team_totals.max - @team_totals.min %></strong>
 </div>

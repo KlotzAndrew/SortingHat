@@ -4,7 +4,7 @@ class CreateTournaments < ActiveRecord::Migration
     	t.string :name
     	t.string :solo_input
     	t.string :duo_input
-    	t.string :balanced_teams
+    	t.text :balanced_teams
       t.timestamps
     end
   end

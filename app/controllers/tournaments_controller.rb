@@ -1,5 +1,6 @@
 class TournamentsController < ApplicationController
 	def team_builder
+
 		tour = Tournament.find(1)
 		@tournament = tour
 		@name = tour.name
@@ -13,7 +14,7 @@ class TournamentsController < ApplicationController
 		#HELPERS
 
 		#get team averages + std
-		if @balanced_teams != "[]"
+		if @balanced_teams != [] && !@balanced_teams.nil?
 			team_sums = []
 			@balanced_teams.each do |y|
 				team_sums << y.inject{|sum,x| sum + x }
@@ -21,6 +22,7 @@ class TournamentsController < ApplicationController
 			@team_totals = team_sums
 
 			team_mean = team_sums.inject{|sum,x| sum + x }/team_sums.count
+			@team_mean = team_mean
 			team_sums_sq = []
 			team_sums.each do |x|
 			team_sums_sq << (team_mean - x)**2
