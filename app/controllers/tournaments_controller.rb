@@ -13,27 +13,29 @@ class TournamentsController < ApplicationController
 		#HELPERS
 
 		#get team averages + std
-		team_sums = []
-		@balanced_teams.each do |y|
-			team_sums << y.inject{|sum,x| sum + x }
-		end	
-		@team_totals = team_sums
+		if @balanced_teams != "[]"
+			team_sums = []
+			@balanced_teams.each do |y|
+				team_sums << y.inject{|sum,x| sum + x }
+			end	
+			@team_totals = team_sums
 
-		team_mean = team_sums.inject{|sum,x| sum + x }/team_sums.count
-		team_sums_sq = []
-		team_sums.each do |x|
-		team_sums_sq << (team_mean - x)**2
-		end
-		std = (team_sums_sq.inject{|sum,x| sum + x }/(team_sums.count - 1))**0.5
-		@std = std.round(2)
+			team_mean = team_sums.inject{|sum,x| sum + x }/team_sums.count
+			team_sums_sq = []
+			team_sums.each do |x|
+			team_sums_sq << (team_mean - x)**2
+			end
+			std = (team_sums_sq.inject{|sum,x| sum + x }/(team_sums.count - 1))**0.5
+			@std = std.round(2)
 
-		#mark duo players
-		check = []
-		@duo_players.each do |x,y|
-			check << x
-			check << y
+			#mark duo players
+			check = []
+			@duo_players.each do |x,y|
+				check << x
+				check << y
+			end
+			@check = check
 		end
-		@check = check
 	end
 
 	def update
