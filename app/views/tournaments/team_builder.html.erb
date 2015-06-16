@@ -29,23 +29,25 @@
 	<% end %>
 </div>
 
-<div style="margin-top: 25px;">
-	<strong>Output</strong> <br/>
-	<% i = 1 %>
-	<% @balanced_teams.each do |x| %>
-		Team <%= i %>: 
-		[
-		<% y = x.sort_by(&:to_i) %>
-		<% y.each do |z| %> 
-			<% if @check.include?(z) %>
-				<u><%= z %></u> 
-			<% else %>
-				<%= z %>
-			<% end %>,
-		<% end %> ]
-		<i>(avg: <%= @team_totals[i-1] %>, Diff from mean: <%= @team_totals[i-1] - @team_mean %>)</i><br/>
-		<% i = i += 1 %>
-	<% end %>
-	<br/>
-STD: <strong><%= @std %></strong>, AVG: <strong><%= @team_mean %></strong>, Spread: <strong><%= @team_totals.max - @team_totals.min %></strong>
-</div>
+<% if @balanced_teams.count > 0 %>
+	<div style="margin-top: 25px;">
+		<strong>Output</strong> <br/>
+		<% i = 1 %>
+		<% @balanced_teams.each do |x| %>
+			Team <%= i %>: 
+			[
+			<% y = x.sort_by(&:to_i) %>
+			<% y.each do |z| %> 
+				<% if @check.include?(z) %>
+					<u><%= z %></u> 
+				<% else %>
+					<%= z %>
+				<% end %>,
+			<% end %> ]
+			<i>(avg: <%= @team_totals[i-1] %>, Diff from mean: <%= @team_totals[i-1] - @team_mean %>)</i><br/>
+			<% i = i += 1 %>
+		<% end %>
+		<br/>
+	STD: <strong><%= @std %></strong>, AVG: <strong><%= @team_mean %></strong>, Spread: <strong><%= @team_totals.max - @team_totals.min %></strong>
+	</div>
+<% end %>
