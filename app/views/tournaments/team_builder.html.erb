@@ -48,6 +48,7 @@
 			<% i = i += 1 %>
 		<% end %>
 		<br/>
-	STD: <strong><%= @std %></strong>, AVG: <strong><%= @team_mean %></strong>, Spread: <strong><%= @team_totals.max - @team_totals.min %></strong>
-	</div>
+	STD: <strong><%= @std %></strong>, Range: <strong><%= @team_totals.max - @team_totals.min %></strong>
+	</div> <br/>
+	Summoner mean: <strong><%= @team_mean/5 %></strong>, Team mean: <strong><%= @team_mean %></strong>
 <% end %>
