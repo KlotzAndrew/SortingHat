@@ -7,7 +7,6 @@ class TournamentsController < ApplicationController
 				:balanced_teams => "[]")
 		end
 
-
 		@tournament = tour
 		@name = tour.name
 		@solo_players = JSON.parse(tour.solo_input)

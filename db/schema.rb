@@ -15,8 +15,8 @@ ActiveRecord::Schema.define(version: 20150616173719) do
 
   create_table "tournaments", force: true do |t|
     t.string   "name"
-    t.string   "solo_input"
-    t.string   "duo_input"
+    t.text     "solo_input"
+    t.text     "duo_input"
     t.text     "balanced_teams"
     t.datetime "created_at"
     t.datetime "updated_at"
