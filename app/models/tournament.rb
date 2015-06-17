@@ -10,20 +10,74 @@ class Tournament < ActiveRecord::Base
 		all_users << duo_users
 		all_users_flat = all_users.flatten
 
-		Rails.logger.info "solo_users: #{solo_users}"
-		Rails.logger.info "duo_users: #{duo_users}"
-		Rails.logger.info "all_users: #{all_users_flat}"
-
 		user_count = solo_users.flatten.count + duo_users.flatten.count
 
+		#build traunch sizes
 		traunch_count = (user_count/40.to_f).ceil
-		Rails.logger.info "traunch_count: #{traunch_count}"
+		traunch_sizes = []
+		t_size_remainer = user_count
+		t_remainder = traunch_count
 
+		traunch_count.times do |x|
+			traunch_sizes << (t_size_remainer/t_remainder - t_size_remainer/t_remainder % 5)
+			t_size_remainer = t_size_remainer - traunch_sizes.last
+			t_remainder = t_remainder - 1
+		end
+
+		
+		#build traunch players!
+		traunch_solo = []
+		traunch_duo = []
+		traunch_count.times do |x|
+			traunch_solo << []
+			traunch_duo << []
+		end
+
+		Rails.logger.info "traunch_solo: #{traunch_solo}"
+		Rails.logger.info "traunch_duo: #{traunch_duo}"
+		duop = 0
+		duo_users.sort_by(&:sum).each do |x|
+			if duop == traunch_count-1
+				duop = 0
+			else
+				duop = duop += 1
+			end
+			Rails.logger.info "traunch_duo[duop]: #{traunch_duo[duop]}"
+			Rails.logger.info "x: #{x}"
+			traunch_duo[duop] << x
+		end
+
+		solop = 0
+		solo_users.sort_by(&:to_i).each do |x|
+			if solop == traunch_count-1
+				solop = 0
+			else
+				solop = solop += 1
+			end	
+
+			while traunch_solo[solop].count == traunch_sizes[solop]
+				solop = solop += 1
+				if solop == traunch_count-1
+					solop = 0
+				end
+			end
+
+			traunch_solo[solop] << x
+
+		end
+
+		Rails.logger.info "user_count: #{user_count}"
+		Rails.logger.info "traunch_sizes: #{traunch_sizes}"
+		Rails.logger.info "traunch_count: #{traunch_count}"
+		Rails.logger.info "traunch_solo: #{traunch_solo}"
+		Rails.logger.info "traunch_duo: #{traunch_duo}"
+		Rails.logger.info "t1 flat: #{traunch_duo.first.flatten.count + traunch_solo.first.flatten.count}"
+		Rails.logger.info "t2 flat: #{traunch_duo.last.flatten.count + traunch_solo.last.flatten.count}"
 
 		Rails.logger.info "user_count <= 40: #{user_count <= 40}"
 		Rails.logger.info "user_count % 5 == 0: #{user_count % 5 == 0}"
 		Rails.logger.info "all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq: #{all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq}"
-		if user_count <= 400 && user_count % 5 == 0 && all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq
+		if user_count <= 400 && user_count % 5 == 0 && all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq.size == 0
 			all_solo = solo_users
 			all_duo = duo_users
 
@@ -35,7 +89,7 @@ class Tournament < ActiveRecord::Base
 			st = Time.now.to_i
 			run = 1
 
-			while Time.now.to_i - st < 20
+			while Time.now.to_i - st < 2
 
 			solo_users = all_solo
 			duo_users = all_duo
@@ -91,7 +145,7 @@ class Tournament < ActiveRecord::Base
 			et = Time.now.to_i
 			Rails.logger.info "time: #{et - st} Seconds, for #{run} runs"
 		else
-			Rails.logger.info "wrong plaer numbers"
+			Rails.logger.info "wrong player numbers"
 			tour.update(
 				:balanced_teams => "[]")
 		end
@@ -99,27 +153,45 @@ class Tournament < ActiveRecord::Base
 
 	def test_values
 
-		solo_users = []
-		duo_users = []
+		all_uniq = 0
 
-		summoner_count = 80 + 5*rand(0..4)
-		duo_count = rand(0..summoner_count/3.round(0))
-		solo_count = summoner_count - duo_count*2
+		while all_uniq == 0
+			solo_users = []
+			duo_users = []
 
-		solo_count.times do |x|
-			solo_users << rand(1000..3000)
+			summoner_count = 45 + 5*rand(0..4)
+			duo_count = rand(0..summoner_count/3.round(0))
+			solo_count = summoner_count - duo_count*2
+
+			solo_count.times do |x|
+				solo_users << rand(1000..3000)
+			end
+
+			duo_count.times do |x|
+				q = []
+				2.times do |y|
+					q << rand(1000..3000)
+				end
+				duo_users << q
+			end
+
+			test_users = []
+			test_users << solo_users
+			test_users << duo_users
+			test_users_flat = test_users.flatten
+			Rails.logger.info "all_users_flat: #{test_users_flat}"
+			if test_users_flat.select{|item| test_users_flat.count(item) > 1}.uniq.size == 0
+				all_uniq = 1
+			else
+				Rails.logger.info "team duplicates: #{test_users_flat.select{|item| test_users_flat.count(item) > 1}.uniq.size}"
+			end
+			Rails.logger.info "built a team of: #{summoner_count}, uniq: #{all_uniq}"
 		end
 
-		duo_count.times do |x|
-			q = []
-			2.times do |y|
-				q << rand(1000..3000)
-			end
-			duo_users << q
-		end		
 		Tournament.first.update(
 			:solo_input => solo_users.to_s,
-			:duo_input => duo_users.to_s)
+			:duo_input => duo_users.to_s,
+			:balanced_teams => nil)
 		#duo 2154, 2300, 1874, 2838, 1447, 1544, 2920, 1420, 1887, 2804, 2688, 1054, 1290, 1823, 1619, 2536, 2744, 1416, 1363, 2034, 1839, 1170, 2841, 2378
 		#solo 2093, 1780, 1959, 2076, 1437, 1135, 2775, 1781, 2925, 2818, 2300, 2480, 1823, 2541, 2872, 1455
 
