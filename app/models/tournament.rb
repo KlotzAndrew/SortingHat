@@ -1,14 +1,14 @@
 class Tournament < ActiveRecord::Base
 
 	def sorting_time
-tour = Tournament.first
-solo_users = JSON.parse(tour.solo_input)
-duo_users = JSON.parse(tour.duo_input)
+		tour = Tournament.first
+		solo_users = JSON.parse(tour.solo_input)
+		duo_users = JSON.parse(tour.duo_input)
 
-all_users = []
-all_users << solo_users
-all_users << duo_users
-all_users_flat = all_users.flatten
+		all_users = []
+		all_users << solo_users
+		all_users << duo_users
+		all_users_flat = all_users.flatten
 
 		Rails.logger.info "solo_users: #{solo_users}"
 		Rails.logger.info "duo_users: #{duo_users}"
@@ -101,11 +101,15 @@ all_users_flat = all_users.flatten
 		solo_users = []
 		duo_users = []
 
-		16.times do |x|
+		summoner_count = 20 + 5*rand(0..4)
+		duo_count = rand(0..summoner_count/3.round(0))
+		solo_count = summoner_count - duo_count*2
+
+		solo_count.times do |x|
 			solo_users << rand(1000..3000)
 		end
 
-		12.times do |x|
+		duo_count.times do |x|
 			q = []
 			2.times do |y|
 				q << rand(1000..3000)
