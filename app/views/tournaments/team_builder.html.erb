@@ -2,7 +2,7 @@
 
 <%= @name %>
 
-<strong>Total Summoners (<%= @player_count %>)</strong>  *must be divisible by 5<br>
+<strong>Total Summoners (<%= @player_count %>)</strong>  *must be divisible by 5 && 8 teams or less<br>
 	<%= form_for @tournament do |t| %>
 	  <%= t.submit "Random Values" %>
 	<% end %>
