@@ -89,7 +89,7 @@ class Tournament < ActiveRecord::Base
 			st = Time.now.to_i
 			run = 1
 
-			while Time.now.to_i - st < 2
+			while Time.now.to_i - st < 20
 
 			solo_users = all_solo
 			duo_users = all_duo
@@ -159,7 +159,7 @@ class Tournament < ActiveRecord::Base
 			solo_users = []
 			duo_users = []
 
-			summoner_count = 45 + 5*rand(0..4)
+			summoner_count = 20 + 5*rand(4..5)
 			duo_count = rand(0..summoner_count/3.round(0))
 			solo_count = summoner_count - duo_count*2
 
@@ -195,9 +195,9 @@ class Tournament < ActiveRecord::Base
 		#duo 2154, 2300, 1874, 2838, 1447, 1544, 2920, 1420, 1887, 2804, 2688, 1054, 1290, 1823, 1619, 2536, 2744, 1416, 1363, 2034, 1839, 1170, 2841, 2378
 		#solo 2093, 1780, 1959, 2076, 1437, 1135, 2775, 1781, 2925, 2818, 2300, 2480, 1823, 2541, 2872, 1455
 
-		# Tournament.create(
-		# :solo_input => "[]",
-		# :duo_input => "[[]]",
-		# :balanced_teams => "[]")
+	# Tournament.create(
+	# :solo_input => "[]",
+	# :duo_input => "[[]]",
+	# :balanced_teams => "[]")
 	end
 end
