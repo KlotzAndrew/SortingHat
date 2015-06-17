@@ -75,15 +75,15 @@ class TournamentsController < ApplicationController
 		pair = 0
 		counter = 0
 		clean_players.each do |player|
+			if counter % 2 == 0 && counter > 0
+				pair = pair += 1
+				pair_container << []
+			end
 			clean_player = player.gsub(" ", "")
 			Rails.logger.info "length #{clean_player.length}"
 			Rails.logger.info "regex #{clean_player =~ /[0-9]/} "
 			if clean_player.length >= 3 && clean_player =~ /[0-9]/
 				counter = counter += 1
-				if counter % 2 == 0 && counter > 0
-					pair = pair += 1
-					pair_container << []
-				end
 				pair_container[pair] << clean_player.to_i
 				Rails.logger.info "added #{clean_player}"
 			end

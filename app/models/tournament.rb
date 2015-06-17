@@ -12,12 +12,13 @@ all_users_flat = all_users.flatten
 
 		Rails.logger.info "solo_users: #{solo_users}"
 		Rails.logger.info "duo_users: #{duo_users}"
+		Rails.logger.info "all_users: #{all_users_flat}"
 
 		user_count = solo_users.flatten.count + duo_users.flatten.count
 		Rails.logger.info "user_count <= 40: #{user_count <= 40}"
 		Rails.logger.info "user_count % 5 == 0: #{user_count % 5 == 0}"
-		Rails.logger.info "all_users_flat.uniq.size == 1: #{all_users_flat.uniq.size == 0}"
-		if user_count <= 40 && user_count % 5 == 0 && all_users_flat.uniq.size == 0
+		Rails.logger.info "all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq: #{all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq}"
+		if user_count <= 40 && user_count % 5 == 0 && all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq
 			all_solo = solo_users
 			all_duo = duo_users
 
@@ -54,6 +55,7 @@ all_users_flat = all_users.flatten
 					solo_player = solo_users.sample(1)
 					team << solo_player[0]
 					solo_users = solo_users - solo_player
+					Rails.logger.info "solo_player inserted: #{solo_player}, team: #{team}"
 				end
 			end
 
