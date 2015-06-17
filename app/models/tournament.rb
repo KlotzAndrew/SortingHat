@@ -15,10 +15,15 @@ class Tournament < ActiveRecord::Base
 		Rails.logger.info "all_users: #{all_users_flat}"
 
 		user_count = solo_users.flatten.count + duo_users.flatten.count
+
+		traunch_count = (user_count/40.to_f).ceil
+		Rails.logger.info "traunch_count: #{traunch_count}"
+
+
 		Rails.logger.info "user_count <= 40: #{user_count <= 40}"
 		Rails.logger.info "user_count % 5 == 0: #{user_count % 5 == 0}"
 		Rails.logger.info "all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq: #{all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq}"
-		if user_count <= 40 && user_count % 5 == 0 && all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq
+		if user_count <= 400 && user_count % 5 == 0 && all_users_flat.select{|item| all_users_flat.count(item) > 1}.uniq
 			all_solo = solo_users
 			all_duo = duo_users
 
@@ -55,14 +60,10 @@ class Tournament < ActiveRecord::Base
 					solo_player = solo_users.sample(1)
 					team << solo_player[0]
 					solo_users = solo_users - solo_player
-					Rails.logger.info "solo_player inserted: #{solo_player}, team: #{team}"
 				end
 			end
 
 			team_sums = []
-			Rails.logger.info "teams berore sum: #{teams}"
-			Rails.logger.info "total_teams: #{total_teams}"
-			Rails.logger.info "team_sums.count < total_teams: #{team_sums.count < total_teams}"
 			while team_sums.count < total_teams
 				team_sums << teams[team_sums.count].inject{|sum,x| sum + x }
 			end
@@ -88,7 +89,7 @@ class Tournament < ActiveRecord::Base
 			tour.update(
 				:balanced_teams => cand_teams.to_s)
 			et = Time.now.to_i
-			Rails.logger.info "time: #{et - st} Seconds"
+			Rails.logger.info "time: #{et - st} Seconds, for #{run} runs"
 		else
 			Rails.logger.info "wrong plaer numbers"
 			tour.update(
@@ -101,7 +102,7 @@ class Tournament < ActiveRecord::Base
 		solo_users = []
 		duo_users = []
 
-		summoner_count = 20 + 5*rand(0..4)
+		summoner_count = 80 + 5*rand(0..4)
 		duo_count = rand(0..summoner_count/3.round(0))
 		solo_count = summoner_count - duo_count*2
 
