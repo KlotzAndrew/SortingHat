@@ -2,6 +2,12 @@ class TournamentsController < ApplicationController
 	def team_builder
 
 		tour = Tournament.find(1)
+		if tour.balanced_teams.nil?
+			tour.update(
+				:balanced_teams => "[]")
+		end
+
+
 		@tournament = tour
 		@name = tour.name
 		@solo_players = JSON.parse(tour.solo_input)
@@ -9,7 +15,13 @@ class TournamentsController < ApplicationController
 		@min_solo = JSON.parse(tour.solo_input).count
 		@min_duo = @min = JSON.parse(tour.duo_input).count
 		@balanced_teams = JSON.parse(tour.balanced_teams)
-		@player_count = (@solo_players.count + (@duo_players.count*2))
+		@player_count = @solo_players.flatten.count + @duo_players.flatten.count
+
+		all_players = []
+		all_players << @duo_players
+		all_players << @solo_players
+		all_players = all_players.flatten
+		@duplicates = all_players.select{|item| all_players.count(item) > 1}.uniq
 
 		#HELPERS
 
@@ -58,26 +70,28 @@ class TournamentsController < ApplicationController
 	end
 
 	def add_duo(tour, players)
-		sp1 = players.split(",")
-		sp2 = [[]]
-		pairs = 0
-		sp1.each do |x|
-			x1 = x.gsub(" ", "")
-			Rails.logger.info "length #{x1.length}"
-			Rails.logger.info "regex #{x1 =~ /[0-9]/} "
-			if x1.length >= 3 && x1 =~ /[0-9]/
-				if sp2[pairs].count == 2
-					sp2 << []
-					pairs = pairs += 1
+		clean_players = players.gsub("]", "").gsub("[", "").split(",")
+		pair_container = [[]]
+		pair = 0
+		counter = 0
+		clean_players.each do |player|
+			clean_player = player.gsub(" ", "")
+			Rails.logger.info "length #{clean_player.length}"
+			Rails.logger.info "regex #{clean_player =~ /[0-9]/} "
+			if clean_player.length >= 3 && clean_player =~ /[0-9]/
+				counter = counter += 1
+				if counter % 2 == 0 && counter > 0
+					pair = pair += 1
+					pair_container << []
 				end
-				sp2[pairs] << x1.to_i
-				Rails.logger.info "added #{x1}"
+				pair_container[pair] << clean_player.to_i
+				Rails.logger.info "added #{clean_player}"
 			end
 		end
 
-		Rails.logger.info "SP2: #{sp2}"
+		Rails.logger.info "SP2: #{pair_container}"
 		tour.update(
-			:duo_input => sp2.to_s)
+			:duo_input => pair_container.to_s)
 	end
 
 	def add_solo(tour, players)

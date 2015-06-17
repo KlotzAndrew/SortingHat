@@ -2,12 +2,12 @@
 
 <%= @name %>
 
-<strong>Inputs (<%= @player_count %>/40) *only works for 40 players</strong> <br>
+<strong>Total Summoners (<%= @player_count %>)</strong>  *must be divisible by 5<br>
 	<%= form_for @tournament do |t| %>
 	  <%= t.submit "Random Values" %>
 	<% end %>
 <div style="margin-top: 25px;">
-	Solo Players: <%= @solo_players %> <br>
+	Solo Players (<%= @solo_players.flatten.count %>): <%= @solo_players %> <br>
 	<%= form_for @tournament do |t| %>
 	  <%= t.text_field :solo_input, value: "eg, 123,456,689" %>
 	  <%= t.submit "Update Solo Players" %>
@@ -15,9 +15,9 @@
 </div>
 
 <div style="margin-top: 25px;">
-	Duo Players: <%= @duo_players %> <br>
+	Duo Players (<%= @duo_players.flatten.count %>): <%= @duo_players %> <br>
 	<%= form_for @tournament do |t| %>
-	  <%= t.text_field :duo_input, value: "eg, 123,456,689,124" %>
+	  <%= t.text_field :duo_input, value: "eg, 123,456, 689,124" %>
 	  <%= t.submit "Update Duo Players" %>
 	<% end %>
 </div>
@@ -26,6 +26,13 @@
 	<%= form_for @tournament do |t| %>
 	  <%= t.submit "Balance Teams" %>
  *Settings @ low, freezes page for ~30s
+	<% end %>
+	<% if @duplicates.count > 0 %>
+	<span style="color:red;">
+		<strong>
+			Unable to run with duplicate values: <%= @duplicates %>
+		</strong>
+	</span>
 	<% end %>
 </div>
 

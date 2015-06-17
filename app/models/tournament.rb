@@ -1,17 +1,28 @@
 class Tournament < ActiveRecord::Base
 
 	def sorting_time
-		tour = Tournament.first
-		solo_users = JSON.parse(tour.solo_input)
-		duo_users = JSON.parse(tour.duo_input)
+tour = Tournament.first
+solo_users = JSON.parse(tour.solo_input)
+duo_users = JSON.parse(tour.duo_input)
+
+all_users = []
+all_users << solo_users
+all_users << duo_users
+all_users_flat = all_users.flatten
 
 		Rails.logger.info "solo_users: #{solo_users}"
-		Rails.logger.info "solo_users: #{duo_users}"
+		Rails.logger.info "duo_users: #{duo_users}"
 
-		if (solo_users.count + (duo_users.count*2)) == 40
+		user_count = solo_users.flatten.count + duo_users.flatten.count
+		Rails.logger.info "user_count <= 40: #{user_count <= 40}"
+		Rails.logger.info "user_count % 5 == 0: #{user_count % 5 == 0}"
+		Rails.logger.info "all_users_flat.uniq.size == 1: #{all_users_flat.uniq.size == 0}"
+		if user_count <= 40 && user_count % 5 == 0 && all_users_flat.uniq.size == 0
 			all_solo = solo_users
 			all_duo = duo_users
 
+			total_teams = user_count/5
+			Rails.logger.info "total_teams: #{total_teams}"
 			cand_teams = []
 			cand_std = 2000
 
@@ -24,14 +35,14 @@ class Tournament < ActiveRecord::Base
 			duo_users = all_duo
 
 			teams = []
-				8.times do |x|
+				total_teams.times do |x|
 				teams << []
 			end
 
 			duo_users.each do |duo_x, duo_y|
-				team_num = rand(0..7)
+				team_num = rand(0..total_teams-1)
 				while teams[team_num].count >= 4
-					team_num = rand(0..7)
+					team_num = rand(0..total_teams-1)
 				end
 
 				teams[team_num] << duo_x
@@ -47,7 +58,10 @@ class Tournament < ActiveRecord::Base
 			end
 
 			team_sums = []
-			while team_sums.count < 8
+			Rails.logger.info "teams berore sum: #{teams}"
+			Rails.logger.info "total_teams: #{total_teams}"
+			Rails.logger.info "team_sums.count < total_teams: #{team_sums.count < total_teams}"
+			while team_sums.count < total_teams
 				team_sums << teams[team_sums.count].inject{|sum,x| sum + x }
 			end
 
@@ -75,6 +89,8 @@ class Tournament < ActiveRecord::Base
 			Rails.logger.info "time: #{et - st} Seconds"
 		else
 			Rails.logger.info "wrong plaer numbers"
+			tour.update(
+				:balanced_teams => "[]")
 		end
 	end
 
