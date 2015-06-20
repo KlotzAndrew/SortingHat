@@ -7,7 +7,7 @@
 	  <%= t.submit "Random Values" %>
 	<% end %>
 <div style="margin-top: 25px;">
-	Solo Players (<%= @solo_players.flatten.count %>): <%= @solo_players %> <br>
+	Solo Players (<%= @solo_players.flatten.count %>): <br/><%= @solo_players %> <br>
 	<%= form_for @tournament do |t| %>
 	  <%= t.text_field :solo_input, value: "eg, 123,456,689" %>
 	  <%= t.submit "Update Solo Players" %>
@@ -15,7 +15,7 @@
 </div>
 
 <div style="margin-top: 25px;">
-	Duo Players (<%= @duo_players.flatten.count %>): <%= @duo_players %> <br>
+	Duo Players (<%= @duo_players.flatten.count %>): <br/> <%= @duo_players %> <br>
 	<%= form_for @tournament do |t| %>
 	  <%= t.text_field :duo_input, value: "eg, 123,456, 689,124" %>
 	  <%= t.submit "Update Duo Players" %>
