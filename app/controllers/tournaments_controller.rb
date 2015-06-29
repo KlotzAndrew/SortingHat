@@ -1,7 +1,7 @@
 class TournamentsController < ApplicationController
 	def team_builder
 
-		tour = Tournament.find(1)
+		tour = Tournament.find(1) #catches sill errors :p
 		if tour.balanced_teams.nil?
 			tour.update(
 				:balanced_teams => "[]")
