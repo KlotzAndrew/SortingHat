@@ -65,10 +65,10 @@
 
 	<section id="raw">
 		<h1 class="text-center">
-			Comma Seperated Line Output
+			<%= link_to 'Download CSV list', root_path(format: "csv") %>
 		</h1>
 
-			<div class="col-md-12">
+<!-- 			<div class="col-md-12">
 			<h5><u>Team 0:</u></h5> 
 				elo
 				<br/>
@@ -79,30 +79,30 @@
 				ign									
 			</div>
 
-		<% i = 0 %>
-		<% @balanced_teams.each do |x| %>
-			<div class="col-md-12">
-			<h5><u>Team <%= i + 1 %>:</u></h5> 
-				
-				<% @list_elo[i].each do |x| %>
-					<%= x %>,
-				<% end %>
-				<br/>
-				<% @list_name[i].each do |x| %>
-					<%= x %>,
-				<% end %>
-				<br/>
-				<% @list_email[i].each do |x| %>
-					<%= x %>,
-				<% end %>	
-				<br/>
-				<% @list_ign[i].each do |x| %>
-					<%= x %>,
-				<% end %>									
-			</div>
+			<% i = 0 %>
+			<% @balanced_teams.each do |y| %>
+				<div class="col-md-12">
+				<h5><u>Team <%= i + 1 %>:</u></h5> 
+					
+					<% @list_elo[i].each do |x| %>
+						<%= x %>,
+					<% end %>
+					<br/>
+					<% @list_name[i].each do |x| %>
+						<%= x %>,
+					<% end %>
+					<br/>
+					<% @list_email[i].each do |x| %>
+						<%= x %>,
+					<% end %>	
+					<br/>
+					<% @list_ign[i].each do |x| %>
+						<%= x %>,
+					<% end %>									
+				</div>
 
-		<% i = i += 1 %>
-		<% end %>
+			<% i = i += 1 %>
+			<% end %> -->
 
 
 	</section>

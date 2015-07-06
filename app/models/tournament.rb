@@ -1,4 +1,22 @@
+require 'csv'
 class Tournament < ActiveRecord::Base
+
+	def self.to_csv(options)
+
+	# Rails.logger.info "user_count: this goes here"
+	# puts "here??"
+
+	  CSV.generate do |csv|
+			csv << %w{elo name email ign}
+
+		   options.each do |team|
+		   		team.each do |player|
+			      csv << player
+		   		end
+		   		csv << [" ", " "," "," "]
+		    end
+	  end
+	end
 
 	def sorting_time
 		tour = Tournament.first

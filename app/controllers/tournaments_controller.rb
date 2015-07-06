@@ -30,28 +30,52 @@ class TournamentsController < ApplicationController
 		@list_name = []
 		@list_email = []
 		@list_ign = []
-		i = 1
+		@csv_teams2 = []
 		@balanced_teams.each do |x|
+			teambox = []
 			list_elo = []
 			list_name = []
 			list_email = []
 			list_ign = []
 			y = x.sort_by(&:to_i)
+			playerbox = []
 			y.each do |z|
-				summoner = Summoner.where("elo_op = ?", z).first
+				summoner = @summoners.where("elo_op = ?", z).first
 				if summoner.nil?
 				else
+					playerbox << summoner.elo_op
+					playerbox << summoner.name
+					playerbox << summoner.email
+					playerbox << summoner.ign
+
 					list_elo << summoner.elo_op
 					list_name << summoner.name
 					list_email << summoner.email
 					list_ign << summoner.ign
 				end
+				teambox << playerbox
+				playerbox = []
 			end
+			@csv_teams2 << teambox
 			@list_elo << list_elo
 			@list_name << list_name
 			@list_email << list_email
 			@list_ign << list_ign
 		end
+
+		#build csv teams
+		@csv_teams = []
+		i = 0
+		@balanced_teams.each do |x|
+			teambox = []
+			teambox << @list_elo[i]
+			teambox << @list_name[i]
+			teambox << @list_email[i]
+			teambox << @list_ign[i]
+			@csv_teams << teambox
+			i = i += 1
+		end
+
 
 
 		#get team averages + std
@@ -79,7 +103,19 @@ class TournamentsController < ApplicationController
 			end
 			@check = check
 		end
+
+		h2 = [["a",3], ["b",4]]
+		@tournaments = Tournament.all
+		respond_to do |format|
+			format.html
+			format.csv { send_data Tournament.to_csv(@csv_teams2), filename: "Sorting_Hat-#{Date.today}.csv" }
+			# format.csv do
+			# 	headers['Content-Disposition'] = "attachment; filename=\"user-list\""
+			# 	headers['Content-Type'] ||= 'text/csv'	
+			# end			, filename: "summoners-#{Date.today}.csv"
+		end
 	end
+
 
 	def update
 		@tournament = Tournament.find(1)
