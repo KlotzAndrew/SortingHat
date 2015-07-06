@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616173719) do
+ActiveRecord::Schema.define(version: 20150706035427) do
+
+  create_table "summoners", force: true do |t|
+    t.string   "email"
+    t.string   "name"
+    t.string   "ign"
+    t.integer  "elo_op"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tournaments", force: true do |t|
     t.string   "name"

@@ -15,6 +15,7 @@ class TournamentsController < ApplicationController
 		@min_duo = @min = JSON.parse(tour.duo_input).count
 		@balanced_teams = JSON.parse(tour.balanced_teams)
 		@player_count = @solo_players.flatten.count + @duo_players.flatten.count
+		@summoners = Summoner.all
 
 		all_players = []
 		all_players << @duo_players
@@ -23,6 +24,32 @@ class TournamentsController < ApplicationController
 		@duplicates = all_players.select{|item| all_players.count(item) > 1}.uniq
 
 		#HELPERS
+
+		#build team elo list
+		@list_elo = []
+		@list_name = []
+		@list_email = []
+		@list_ign = []
+		i = 1
+		@balanced_teams.each do |x|
+			list_elo = []
+			list_name = []
+			list_email = []
+			list_ign = []
+			y = x.sort_by(&:to_i)
+			y.each do |z|
+				summoner = Summoner.where("elo_op = ?", z).first
+				list_elo << summoner.elo_op
+				list_name << summoner.name
+				list_email << summoner.email
+				list_ign << summoner.ign
+			end
+			@list_elo << list_elo
+			@list_name << list_name
+			@list_email << list_email
+			@list_ign << list_ign
+		end
+
 
 		#get team averages + std
 		if @balanced_teams.count > 0
