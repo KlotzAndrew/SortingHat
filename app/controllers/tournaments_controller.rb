@@ -39,10 +39,13 @@ class TournamentsController < ApplicationController
 			y = x.sort_by(&:to_i)
 			y.each do |z|
 				summoner = Summoner.where("elo_op = ?", z).first
-				list_elo << summoner.elo_op
-				list_name << summoner.name
-				list_email << summoner.email
-				list_ign << summoner.ign
+				if summoner.nil?
+				else
+					list_elo << summoner.elo_op
+					list_name << summoner.name
+					list_email << summoner.email
+					list_ign << summoner.ign
+				end
 			end
 			@list_elo << list_elo
 			@list_name << list_name
