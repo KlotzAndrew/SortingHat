@@ -1,28 +1,26 @@
-== README
+== Basic MOBA teambalancer v1
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Very basic MOBA 5v5 teambalancer. Never balance by hand again.
 
-Things you may want to cover:
+* Expects orgonizer to know players mmrs (op.gg, lolking.com, dotabuff.com, etc...)
+* Balances 1 tournament at a time
+* Page freezes while balancing (no background worker, so it can be hosted free on heroku)
 
-* Ruby version
+Setup:
+* CSV export requires users created via command line. Current setup uses arrays of user values, easy copy+paste from excel.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+    i = 0
+    ign.count.times.do |y|
+      Summoner.create(
+        :ign => ign[i],
+        :elo_op => elo[i]
+        :name => name[i]
+        :email => email[i])
+      i += 1
+    end
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+To do:
+
+* Add tests for current version
+* CSV upload for user list
