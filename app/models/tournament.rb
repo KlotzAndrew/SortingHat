@@ -107,7 +107,7 @@ class Tournament < ActiveRecord::Base
 			st = Time.now.to_i
 			run = 1
 
-			while Time.now.to_i - st < 20 #cand_std > 120
+			while Time.now.to_i - st < 20 #cand_std > 140
 
 			solo_users = all_solo
 			duo_users = all_duo
@@ -155,7 +155,6 @@ class Tournament < ActiveRecord::Base
 				Rails.logger.info "std: #{cand_std}, itteration: #{run}"
 			end
 
-			# Rails.logger.info run
 			run = run += 1
 			end
 			tour.update(
@@ -210,12 +209,18 @@ class Tournament < ActiveRecord::Base
 			:solo_input => solo_users.to_s,
 			:duo_input => duo_users.to_s,
 			:balanced_teams => nil)
-		#duo 2154, 2300, 1874, 2838, 1447, 1544, 2920, 1420, 1887, 2804, 2688, 1054, 1290, 1823, 1619, 2536, 2744, 1416, 1363, 2034, 1839, 1170, 2841, 2378
-		#solo 2093, 1780, 1959, 2076, 1437, 1135, 2775, 1781, 2925, 2818, 2300, 2480, 1823, 2541, 2872, 1455
 
-	# Tournament.create(
-	# :solo_input => "[]",
-	# :duo_input => "[[]]",
-	# :balanced_teams => "[]")
+		i = 0
+		test_users.flatten.count.times do |x|
+		  Summoner.create(
+		    :elo_op => test_users.flatten[i],
+		    :ign => "summoner_" + i.to_s,
+		    :email => "test_" + i.to_s + "@email.com",
+		    :name => "kanye_" + i.to_s)
+		  i = i += 1
+		end			
+
+
+
 	end
 end

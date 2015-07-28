@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
+	
 	def team_builder
-
 		tour = Tournament.find(1) #catches sill errors :p
 		if tour.balanced_teams.nil?
 			tour.update(
@@ -23,7 +23,8 @@ class TournamentsController < ApplicationController
 		all_players = all_players.flatten
 		@duplicates = all_players.select{|item| all_players.count(item) > 1}.uniq
 
-		#HELPERS
+
+		#show all summoners?
 
 		#build team elo list
 		@list_elo = []
@@ -63,21 +64,6 @@ class TournamentsController < ApplicationController
 			@list_ign << list_ign
 		end
 
-		#build csv teams
-		@csv_teams = []
-		i = 0
-		@balanced_teams.each do |x|
-			teambox = []
-			teambox << @list_elo[i]
-			teambox << @list_name[i]
-			teambox << @list_email[i]
-			teambox << @list_ign[i]
-			@csv_teams << teambox
-			i = i += 1
-		end
-
-
-
 		#get team averages + std
 		if @balanced_teams.count > 0
 			team_sums = []
@@ -104,15 +90,10 @@ class TournamentsController < ApplicationController
 			@check = check
 		end
 
-		h2 = [["a",3], ["b",4]]
 		@tournaments = Tournament.all
 		respond_to do |format|
 			format.html
 			format.csv { send_data Tournament.to_csv(@csv_teams2), filename: "Sorting_Hat-#{Date.today}.csv" }
-			# format.csv do
-			# 	headers['Content-Disposition'] = "attachment; filename=\"user-list\""
-			# 	headers['Content-Type'] ||= 'text/csv'	
-			# end			, filename: "summoners-#{Date.today}.csv"
 		end
 	end
 

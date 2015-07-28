@@ -14,14 +14,16 @@
 			  <%= t.text_field :solo_input, value: "eg, 123,456,689" %>
 			  <%= t.submit "Update Solo Players" %>
 			<% end %>
+			<p>*accepts comma seprated values</p>
 		</div>
 
 		<div style="margin-top: 25px;">
 			Duo Players (<%= @duo_players.flatten.count %>): <br/> <%= @duo_players %> <br>
 			<%= form_for @tournament do |t| %>
 			  <%= t.text_field :duo_input, value: "eg, 123,456, 689,124" %>
-			  <%= t.submit "Update Duo Players" %>
+			  <%= t.submit "Update Duo Players" %> 
 			<% end %>
+			<p>*accepts comma seprated values</p>
 		</div>
 
 		<div style="margin-top: 25px;">
@@ -68,42 +70,30 @@
 			<%= link_to 'Download CSV list', root_path(format: "csv") %>
 		</h1>
 
-<!-- 			<div class="col-md-12">
-			<h5><u>Team 0:</u></h5> 
-				elo
-				<br/>
-				name
-				<br/>
-				email	
-				<br/>
-				ign									
-			</div>
-
-			<% i = 0 %>
-			<% @balanced_teams.each do |y| %>
-				<div class="col-md-12">
-				<h5><u>Team <%= i + 1 %>:</u></h5> 
-					
-					<% @list_elo[i].each do |x| %>
-						<%= x %>,
-					<% end %>
-					<br/>
-					<% @list_name[i].each do |x| %>
-						<%= x %>,
-					<% end %>
-					<br/>
-					<% @list_email[i].each do |x| %>
-						<%= x %>,
-					<% end %>	
-					<br/>
-					<% @list_ign[i].each do |x| %>
-						<%= x %>,
-					<% end %>									
-				</div>
-
-			<% i = i += 1 %>
-			<% end %> -->
-
-
+<h3>User List is Updated via Command Line</h3>
+		<table class="table">
+			<thead>
+				<tr>
+				  <th class="col-md-1">#</th>
+				  <th class="col-md-3">Summoner</th>
+				  <th class="col-md-2 text-center">ELO</th>
+				  <th class="col-md-3 text-center">Name</th>
+				  <th class="col-md-3 text-center">Email</th>
+				</tr>
+			</thead>
+			<tbody>
+			<% i = 1 %>
+			<% @summoners.each do |x| %>			
+				<tr>
+					<td><%= i %></td>
+					<td><%= x.ign %></td>
+					<td><%= x.elo_op %></td>
+					<td><%= x.name %></td>
+					<td><%= x.email %></td>
+				</tr>
+			<% i += 1%>
+			<% end %>
+			</tbody>
+		</table>
 	</section>
 </div>
