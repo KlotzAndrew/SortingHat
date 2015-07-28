@@ -210,6 +210,7 @@ class Tournament < ActiveRecord::Base
 			:duo_input => duo_users.to_s,
 			:balanced_teams => nil)
 
+		Summoner.delete_all
 		i = 0
 		test_users.flatten.count.times do |x|
 		  Summoner.create(
