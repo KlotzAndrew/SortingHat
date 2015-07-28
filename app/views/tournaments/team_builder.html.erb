@@ -29,7 +29,7 @@
 		<div style="margin-top: 25px;">
 			<%= form_for @tournament do |t| %>
 			  <%= t.submit "Balance Teams" %>
-		 *Settings @ low, freezes page for ~20s
+		 *Settings @ low, freezes page for ~<span id="countdown">20</span>s
 			<% end %>
 			<% if @duplicates.count > 0 %>
 			<span style="color:red;">
@@ -70,8 +70,8 @@
 			<%= link_to 'Download CSV list', root_path(format: "csv") %>
 		</h1>
 
-<h3>User List is Updated via Command Line</h3>
-		<table class="table">
+	<h3>*User List is Updated via Command Line</h3>
+<!-- 		<table class="table">
 			<thead>
 				<tr>
 				  <th class="col-md-1">#</th>
@@ -94,6 +94,6 @@
 			<% i += 1%>
 			<% end %>
 			</tbody>
-		</table>
+		</table> -->
 	</section>
 </div>
