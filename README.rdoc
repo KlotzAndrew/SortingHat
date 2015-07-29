@@ -2,7 +2,8 @@
 
 Very basic MOBA 5v5 teambalancer. Never balance by hand again.
 
-* Expects orgonizer to know players mmrs (op.gg, lolking.com, dotabuff.com, etc...)
+* Generated team mmrs are not statisticaly different. Coefficent of Varaition ~0.015.
+* Expects orgonizer to know each player's mmr (op.gg, lolking.com, dotabuff.com, etc...)
 * Balances 1 tournament at a time
 * Page freezes while balancing (no background worker, so it can be hosted free on heroku)
 
